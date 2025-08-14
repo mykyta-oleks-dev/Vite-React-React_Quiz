@@ -1,6 +1,12 @@
 import { useRef } from 'react';
 
-const Answers = ({ answers, answerState, chosenAnswer, correctAnswer, onSelectAnswer }) => {
+const Answers = ({
+	answers,
+	answerState,
+	chosenAnswer,
+	correctAnswer,
+	onSelectAnswer,
+}) => {
 	const shuffledAnswers = useRef(null);
 
 	if (!shuffledAnswers.current) {
@@ -33,7 +39,7 @@ const Answers = ({ answers, answerState, chosenAnswer, correctAnswer, onSelectAn
 };
 
 function deriveClass(answer, chosenAnswer, answerState, correctAnswer) {
-	if (answerState === '') return '';
+	if (!answerState) return '';
 
 	if (answerState === 'answered') {
 		if (answer === chosenAnswer) return 'selected';

@@ -1,35 +1,62 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import QuestionTimer from './QuestionTimer';
-import { DEFAULT_TIME } from '../times';
+import { AWAIT_TIME, DEFAULT_TIME, REVEAL_TIME } from '../times';
 import Answers from './Answers';
+import { ANSWERED, AWAIT, CORRECT, WRONG } from '../answerStates';
 
-const Question = ({
-	question,
-	questionIdx,
-	onSelectAnswer,
-	answerState,
-	chosenAnswer,
-}) => {
+const Question = ({ question, onSelectAnswer }) => {
+	const [userAnswer, setUserAnswer] = useState({
+		selectedAnswer: '',
+		state: null,
+	});
+
+	const handleSelectAnswer = (answer) => {
+		setUserAnswer({
+			selectedAnswer: answer,
+			state: ANSWERED,
+		});
+
+		const setRevealTimeout = () => {
+			const isCorrect = question.answers[0] === answer;
+			setUserAnswer((a) => ({
+				...a,
+				state: isCorrect ? CORRECT : WRONG,
+			}));
+
+			setTimeout(() => {
+				onSelectAnswer(answer);
+				setUserAnswer({
+					selectedAnswer: '',
+					state: null,
+				});
+			}, REVEAL_TIME);
+		};
+
+		if (answer)
+			setTimeout(() => {
+				setUserAnswer((a) => ({ ...a, state: AWAIT }));
+				setRevealTimeout();
+			}, AWAIT_TIME);
+		else {
+			setRevealTimeout();
+		}
+	};
+
 	const handleTimeOut = useCallback(() => {
-		onSelectAnswer(null);
-	}, [onSelectAnswer]);
+		handleSelectAnswer(null);
+	}, [handleSelectAnswer]);
 
 	return (
 		<div id="quiz">
 			<div id="question">
-				<QuestionTimer
-					key={`timer-${questionIdx}`}
-					time={DEFAULT_TIME}
-					onTimeOut={handleTimeOut}
-				/>
+				<QuestionTimer time={DEFAULT_TIME} onTimeOut={handleTimeOut} />
 				<h2>{question.text}</h2>
 				<Answers
-					key={`answers-${questionIdx}`}
-					answerState={answerState}
+					answerState={userAnswer.state}
+					chosenAnswer={userAnswer.selectedAnswer}
 					answers={question.answers}
-					chosenAnswer={chosenAnswer}
 					correctAnswer={question.answers[0]}
-					onSelectAnswer={onSelectAnswer}
+					onSelectAnswer={handleSelectAnswer}
 				/>
 			</div>
 		</div>
