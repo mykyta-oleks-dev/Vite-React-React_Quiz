@@ -1,34 +1,26 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import questions from '../questions';
+import Question from './Question';
+import Results from './Results';
 
 const Quiz = () => {
-	const [userAnswers, setAnswers] = useState([]);
+	const [userAnswers, setUserAnswers] = useState([]);
 	const activeQuestion = userAnswers.length;
 
-	const answers = questions[activeQuestion].answers;
+	const question = questions[activeQuestion];
 
-	const handleSelectAnswer = (answer) => {
-		if (answer === questions[activeQuestion].answers[0]) alert('yes!');
-		else alert('no!');
-		setAnswers((answers) => [...answers, answer]);
-	};
+	const handleSelectAnswer = useCallback((answer) => {
+		setUserAnswers((answers) => [...answers, answer]);
+	}, []);
+
+	if (!question) return <Results userAnswers={userAnswers} />;
 
 	return (
-		<div id="question">
-			<h2>{questions[activeQuestion].text}</h2>
-			<ul id="answers">
-				{answers.map((a) => (
-					<li key={a} className="answer">
-						<button
-							type="button"
-							onClick={() => handleSelectAnswer(a)}
-						>
-							{a}
-						</button>
-					</li>
-				))}
-			</ul>
-		</div>
+		<Question
+			question={question}
+			questionIdx={activeQuestion}
+			onSelectAnswer={handleSelectAnswer}
+		/>
 	);
 };
 
