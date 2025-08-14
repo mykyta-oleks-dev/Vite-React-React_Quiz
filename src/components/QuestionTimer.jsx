@@ -20,8 +20,6 @@ const QuestionTimer = ({ time, onTimeOut }) => {
 		};
 	}, [time, onTimeOut]);
 
-	useEffect(() => {}, []);
-
 	return <progress id="question-timer" max={time} value={timeLeft} />;
 };
 
