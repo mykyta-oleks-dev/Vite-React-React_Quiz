@@ -36,6 +36,15 @@ const Answers = ({
 					</li>
 				);
 			})}
+			<li className="answer">
+				<button
+					type="button"
+					onClick={() => onSelectAnswer(null)}
+					disabled={!!chosenAnswer}
+				>
+					Skip
+				</button>
+			</li>
 		</ul>
 	);
 };
