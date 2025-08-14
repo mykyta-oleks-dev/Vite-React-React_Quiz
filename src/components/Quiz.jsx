@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import questions from '../questions';
+import QUESTIONS from '../questions';
 import Question from './Question';
 import Results from './Results';
 
@@ -7,7 +7,7 @@ const Quiz = () => {
 	const [userAnswers, setUserAnswers] = useState([]);
 	const activeQuestion = userAnswers.length;
 
-	const question = questions[activeQuestion];
+	const question = QUESTIONS[activeQuestion];
 
 	if (!question) return <Results userAnswers={userAnswers} />;
 

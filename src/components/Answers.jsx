@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { ANSWERED } from '../answerStates';
 
 const Answers = ({
 	answers,
@@ -28,6 +29,7 @@ const Answers = ({
 							type="button"
 							onClick={() => onSelectAnswer(a)}
 							className={className}
+							disabled={!!chosenAnswer}
 						>
 							{a}
 						</button>
@@ -41,7 +43,7 @@ const Answers = ({
 function deriveClass(answer, chosenAnswer, answerState, correctAnswer) {
 	if (!answerState) return '';
 
-	if (answerState === 'answered') {
+	if (answerState === ANSWERED) {
 		if (answer === chosenAnswer) return 'selected';
 		return '';
 	} else {

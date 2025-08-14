@@ -2,16 +2,14 @@ import { useEffect, useState } from 'react';
 
 const DELAY = 10;
 
-const QuestionTimer = ({ time, onTimeOut }) => {
+const QuestionTimer = ({ time, onTimeOut, answered }) => {
 	const [timeLeft, setTimeLeft] = useState(time);
 
 	useEffect(() => {
-		console.log('set interval');
 		const interval = setInterval(() => {
 			setTimeLeft((prev) => prev - DELAY);
 		}, DELAY);
 
-		console.log('set timeout');
 		let timer = setTimeout(onTimeOut, time);
 
 		return () => {
@@ -20,7 +18,14 @@ const QuestionTimer = ({ time, onTimeOut }) => {
 		};
 	}, [time, onTimeOut]);
 
-	return <progress id="question-timer" max={time} value={timeLeft} />;
+	return (
+		<progress
+			id="question-timer"
+			max={time}
+			value={timeLeft}
+			className={answered ? 'answered' : ''}
+		/>
+	);
 };
 
 export default QuestionTimer;
