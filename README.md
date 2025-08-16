@@ -30,7 +30,7 @@ To run the application in development mode:
 $ npm run dev
 ```
 
-To build the project files perform Typescript transpilation:
+To build the project files:
 
 ```shell
 $ npm run build
